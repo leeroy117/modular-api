@@ -1,11 +1,18 @@
-import { Controller, Get, Param, Post, Patch, Req, Delete, Query, Ip, Body, ParseIntPipe } from '@nestjs/common';
-import { UserService } from './user.service';
+import { Controller, Get, Param, Post, Patch, Req, Delete, Query, Ip, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
+
+import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from 'src/guards/auth/auth.guard';
+import { Public } from 'src/common/public_access/public_access';
+
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
+
+  // @UseGuards(AuthGuard)
+  // @Public()
   @Get()
   getUsers() {
     return this.userService.get();

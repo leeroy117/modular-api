@@ -1,10 +1,19 @@
-import { Controller, Injectable } from "@nestjs/common";
+import { Controller, Get, HttpCode, HttpStatus, Injectable } from "@nestjs/common";
+import { Public } from "./common/public_access/public_access";
 
 @Controller({})
 export class AppController{
 
     // @Injectable()
-    // get() {
-    //   return { name: 'Uchechukwu Azubuko', country: 'Nigeria' };
-    // }
+    // @Public()
+    @HttpCode(HttpStatus.OK)
+    @Get()
+    get() {
+      const json = {
+        statusCode: HttpStatus.OK,
+        message: 'You are logged:D'
+      }
+      return json;
+      // return 'hola';
+    }
 }
