@@ -1,4 +1,4 @@
-import { DatabaseService } from '../../database/database.service';
+import { DatabaseService } from '../../common/database/database.service';
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,6 +6,27 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UserService {
     constructor(private databaseService: DatabaseService ){}
+    async getByUsername(username: string) {
+        // const id_persona = 200;
+        const { mysqlConnection, sshConnection } = await this.databaseService.getConnection();
+
+        try {
+            await mysqlConnection.beginTransaction();
+    
+            const [rows, fields] = await mysqlConnection.execute('SELECT * FROM escolar.tb_usuarios WHERE username = ?;', [username]);
+
+            await mysqlConnection.commit();
+
+            return rows[0]
+            
+        } catch (error) {
+            await mysqlConnection.rollback();
+        } finally {
+            mysqlConnection.end();
+            sshConnection.end();
+        }
+
+    }
     async get() {
         const id_persona = 200;
         const { mysqlConnection, sshConnection } = await this.databaseService.getConnection();

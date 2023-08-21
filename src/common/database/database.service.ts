@@ -133,25 +133,20 @@ export class DatabaseService {
                     9876,
                 async function (err, stream){
                     
-                    if (err){err} ;
+                    if (err){reject(err)} ;
                     
                     try {
                         mysqlConfig.stream = stream;
                         
-                        // return createConnection(mysqlConfig);
                         const connection = await createConnection(mysqlConfig);
-                        // console.log("🚀 ~ file: database.service.ts:136 ~ DatabaseService ~ connection:", connection)
                         const objConnection : TConnection = {
                             mysqlConnection: connection,
                             sshConnection: ssh
                         }
                         resolve(objConnection);
-                        // return connection;
                         
                     } catch (error) {
-                        // ssh.end();
-                        return error;
-                        // reject(error);
+                        reject(error);
                     }
         
                 }
@@ -159,15 +154,10 @@ export class DatabaseService {
             })
                 .connect(sshTunnelConfig);
             } catch (error) {
-                // ssh.end();
-                // return error;
                 reject(error)
             }
     
         });
     }
 
-    // async invokeConnection(){
-
-    // }
 }
